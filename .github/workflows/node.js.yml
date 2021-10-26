@@ -17,7 +17,11 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        cache: 'npm'
+        cache-dependency-path: perfanalytics-api/package-lock.json        
+
+
+
 
     steps:
     - uses: actions/checkout@v2
