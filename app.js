@@ -4,10 +4,8 @@ const trace = require('./tracing');
 trace.start("SAMPLE-SERVICE");
 const PORT = process.env.PORT || "8080";
 const app = express();
-const { countAllRequests, incrementReqInErrorCount, register } = require("./monitoring");
 const { work } = require('./work');
 var ip = require("ip");
-app.use(countAllRequests());
 
 
 app.get("/", (req, res) => {
