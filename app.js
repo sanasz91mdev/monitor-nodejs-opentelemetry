@@ -1,5 +1,7 @@
 const express = require("express");
-
+//import tracing reference
+const trace = require('./tracing');
+trace.start("SAMPLE-SERVICE");
 const PORT = process.env.PORT || "8080";
 const app = express();
 const { countAllRequests, incrementReqInErrorCount, register } = require("./monitoring");
@@ -10,6 +12,20 @@ app.use(countAllRequests());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
+});
+
+
+app.get("/work", async (req, res) => {
+
+  // refer this to implement tracing using span.js
+    await work(req);
+    var json = {
+      "status": "OK",
+      "timeStamp": new Date().toISOString()
+    }
+    res.header("Content-Type", "application/json")
+    res.send(json);
+
 });
 
 app.get("/metrics", async (req, res) => {
@@ -45,6 +61,11 @@ app.get("/health", async (req, res) => {
     res.send(json);
   }
 });
+
+
+
+
+
 
 app.listen(parseInt(PORT, 10), () => {
   console.log(`Listening for requests on http://${ip.address()}:${PORT}`);
