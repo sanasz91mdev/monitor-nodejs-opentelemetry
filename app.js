@@ -10,21 +10,21 @@ var ip = require("ip");
 
 
 // Add this to the VERY top of the first file loaded in your app
-var apm = require('elastic-apm-node').start({
+// var apm = require('elastic-apm-node').start({
 
-  // Override the service name from package.json
-  // Allowed characters: a-z, A-Z, 0-9, -, _, and space
-  serviceName: 'new-service',
+//   // Override the service name from package.json
+//   // Allowed characters: a-z, A-Z, 0-9, -, _, and space
+//   serviceName: 'new-service',
   
-  // Use if APM Server requires a secret token
-  secretToken: 'pHEIKVYnyFpe9Rq1kQ',
+//   // Use if APM Server requires a secret token
+//   secretToken: 'pHEIKVYnyFpe9Rq1kQ',
   
-  // Set the custom APM Server URL (default: http://localhost:8200)
-  serverUrl: 'https://my-deployment-97901c.apm.us-central1.gcp.cloud.es.io',
+//   // Set the custom APM Server URL (default: http://localhost:8200)
+//   serverUrl: 'https://my-deployment-97901c.apm.us-central1.gcp.cloud.es.io',
   
-  // Set the service environment
-  environment: 'production'
-  })
+//   // Set the service environment
+//   environment: 'production'
+//   })
 
 app.get("/", (req, res) => {
   res.send("Hello World");

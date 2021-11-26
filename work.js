@@ -51,7 +51,10 @@ async function doMoreWork(parentSpan){
 async function doWorkWithoutPassingParentSpan(){
   var span = new SpanLib("work-tracer");
   // when implementing instrumentation / or dont have instance of currently active span/trace ..
-  span.start('span-child2',span.getContextFromCurrentActiveRequest());
+  var ctx = span.getContextFromCurrentActiveRequest();
+  console.log("========================CONTEXT======================");
+  console.log(ctx);
+  span.start('span-child2',ctx);
   await sleep(500); // sleep for 500 milliseconds
   span.setStatus(true, "Child 2 operation succeeded");
   span.attachEvent("closing child span");

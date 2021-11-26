@@ -20,6 +20,7 @@ module.exports = class Span {
             appSpan = this.tracer.startSpan(spanName, undefined, context);
         }
         this.span = appSpan;
+        console.log(this.span)
     }
 
     setAttributes = (attributes) => {
@@ -57,6 +58,8 @@ module.exports = class Span {
 
     getContextFromCurrentActiveRequest = () => {
         let current_span = openTelemetry.trace.getSpan(openTelemetry.context.active());
+        let trace_id = current_span?.spanContext()?.traceId;
+        console.log(trace_id);
         var ctx = openTelemetry.trace.setSpan(openTelemetry.context.active(), current_span);
         return ctx;
     }
