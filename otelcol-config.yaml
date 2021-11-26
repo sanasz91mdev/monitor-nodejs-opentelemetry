@@ -1,0 +1,39 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        cors_allowed_origins:
+        - http://*
+        - https://*
+
+exporters:
+  otlp/elastic:
+      endpoint: "my-deployment-****.apm.us-central1.gcp.cloud.es.io:443"
+      headers:
+          Authorization: "Bearer *********"
+
+
+  jaeger:
+    endpoint: "localhost:14250"
+    tls:
+      insecure: true
+
+  logging:
+    loglevel: debug
+
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp/elastic,logging]
+      processors: [batch]
+
+    traces/2:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger,logging]
