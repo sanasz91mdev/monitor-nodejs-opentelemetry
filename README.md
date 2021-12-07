@@ -1,6 +1,12 @@
 # monitor-nodejs-opentelemetry
 monitor-nodejs-opentelemetry
 
+#Run on CLI
+
+node app.js
+
+#Run with docker
+
 docker build . -t sana/opentelem-test
 
 docker run --name prom -p 9090:9090 -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus  --config.file=/etc/prometheus/prometheus.yml
