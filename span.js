@@ -1,4 +1,5 @@
 const openTelemetry = require('@opentelemetry/api');
+const { propagation, ROOT_CONTEXT } = require('@opentelemetry/api');
 
 
 module.exports = class Span {
@@ -20,7 +21,6 @@ module.exports = class Span {
             appSpan = this.tracer.startSpan(spanName, undefined, context);
         }
         this.span = appSpan;
-        console.log(this.span)
     }
 
     setAttributes = (attributes) => {
@@ -64,6 +64,32 @@ module.exports = class Span {
         return ctx;
     }
 
+    //use for communication across processes that uses publisher-consumer model i.e. queues/streams -- see batch-consumer.js for sample
+    injectMessageWithContext = (message, activeContext) => {
+        var ctx = activeContext;
+
+        if (activeContext == undefined) {
+            if (this.span == undefined) {
+                throw "Span instance is required to inject context. start a span 1st before calling function: injectMessageWithContext()."
+            }
+            else {
+                ctx = openTelemetry.trace.setSpan(openTelemetry.context.active(), this.span);
+            }
+        }
+        console.log(`Injecting ...`);
+        propagation.inject(ctx, message);
+        console.log(msg);
+    }
+
+
+    //use for communication across processes that uses publisher-consumer model i.e. queues/streams -- see batch-consumer.js for sample
+    extractAndGetContext = (message) => {
+        console.log(`Extracting ...`);
+        const ctx = propagation.extract(ROOT_CONTEXT, message);
+        return ctx
+    }
+
+
     attachEvent = (eventName, attributes) => {
         var date = new Date().toISOString();
         if (attributes == null || Object.keys(attributes).length < 1) {
@@ -78,10 +104,10 @@ module.exports = class Span {
         this.span.end();
     }
 
-    setDBAttributes= (query,op)=>{
+    setDBAttributes = (query, op) => {
         return {
-            "db.system":"oracle",
-            "db.statement":query,
+            "db.system": "oracle",
+            "db.statement": query,
             "db.operation": op
         }
     }
